@@ -11,11 +11,11 @@ from output import output
 world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
@@ -30,18 +30,48 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+reversedir = {"n": "s", "s": "n", "e": "w", "w": "e"}
+reverse = [None]
+
 # route for knowing where I've been.
 route = visited = {}  # Note that this is a dictionary, not a set
 
 while len(visited) < len(room_graph):
     local = player.current_room.id
+    print("Local Room Number", local)
     localexits = player.current_room.get_exits()
+    DIR = ""
 
     if local not in visited:
+        # if we haven't just started.
+        if reverse[-1]:
+            # remove the most recently used dir from exits so we don't loop.
+            localexits.remove(reverse[-1])
         visited[local] = localexits
 
-output(visited)
+# if we have directions to go
+    if len(visited[local]) > 0:
+        # pop off the last one
+        DIR = visited[local].pop()
+        # put it in the map
+        traversal_path.append(DIR)
+        # map the reverse
+        reverse.append(reversedir[DIR])
+        # MOVETO
+        print("The Journey continues! Move Forward", DIR)
+        player.travel(DIR)
 
+    # if we hit a dead end
+    else:
+        # take off the most recent reverse step
+        if reverse[-1]:
+            DIR = reverse.pop()
+            traversal_path.append(DIR)
+            print("Oof Move Back", DIR)
+            player.travel(DIR)
+
+
+# output(visited)
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
