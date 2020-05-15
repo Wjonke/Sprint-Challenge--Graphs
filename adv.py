@@ -4,7 +4,7 @@ from world import World
 
 import random
 from ast import literal_eval
-from output import output
+# from output import output
 
 
 # Load world
@@ -34,13 +34,28 @@ reversedir = {"n": "s", "s": "n", "e": "w", "w": "e"}
 reverse = [None]
 
 # route for knowing where I've been.
-route = visited = {}  # Note that this is a dictionary, not a set
+
+# before refactor
+# route = visited = {}  # Note that this is a dictionary, not a set
+# before refactor
+
+# after refactor
+visited = {}  # Note that this is a dictionary, not a set
+route = []
+DIR = ""
+# after refactor
 
 while len(visited) < len(room_graph):
     local = player.current_room.id
     print("Local Room Number", local)
     localexits = player.current_room.get_exits()
-    DIR = ""
+    # before refactor
+    # DIR = ""
+    # before refactor
+
+    # after refactor
+    route.append({local: DIR})
+    # after refactor
 
     if local not in visited:
         # if we haven't just started.
@@ -71,7 +86,7 @@ while len(visited) < len(room_graph):
             player.travel(DIR)
 
 
-# output(visited)
+# output(route)
 
 
 # TRAVERSAL TEST - DO NOT MODIFY
