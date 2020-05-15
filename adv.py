@@ -83,7 +83,6 @@ while len(visited) < len(room_graph):
         # MOVETO if there is a "forward" path
         print("The Journey continues! Move Forward", DIR)
         player.travel(DIR)
-
     # if we hit a dead end, initiates reverse and backtracks along path
     else:
         # take off the most recent direction and move the opposite direction until there are available exits
